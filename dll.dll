@@ -1,41 +1,30 @@
-
 #include <iostream>
-#include<windows.h>
-#include<detours.h>
-#include<cstdio>
-#include<string.h>
-#include<wchar.h>
+#include <cstdio>
+#include <windows.h>
+#include <detours.h>
 #pragma comment(lib,"detours.lib")
 int main()
 {
+    
     std::cout << "Hello World!\n";
-    printf("Test!!!!!!!");
-
-    //hello world
-
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
     ZeroMemory(&si, sizeof(STARTUPINFO));
-    ZeroMemory(&pi, sizeof(STARTUPINFO));
-    si.cb = sizeof(STARTUPINFO);   //字节数
-    
-    WCHAR DirPath[MAX_PATH + 1];//261字节
-    wcscpy_s(DirPath, MAX_PATH, L"D:\\Tencent Files\\1546944543\\FileRecv\\TestInitialNullForStudent (1)\\InjectDll\\Debug");//Dll文件夹
-    char DllPath[MAX_PATH + 1] = "D:\\Tencent Files\\1546944543\\FileRecv\\TestInitialNullForStudent (1)\\InjectDll\\Debug\\InnjectDll.dll";
+    ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
+    si.cb = sizeof(STARTUPINFO);
+    WCHAR DirPath[MAX_PATH + 1];
+    wcscpy_s(DirPath, MAX_PATH, L"D:\\TestInitialNullForStudent \\InjectDll\\Debug");
+    char DLLPath[MAX_PATH + 1] = "D:\\TestInitialNullForStudent \\InjectDll\\Debug\\InnjectDll.dll";
     WCHAR EXE[MAX_PATH + 1] = { 0 };
-    wcscpy_s(EXE, MAX_PATH, L"D:\\Tencent Files\\1546944543\\FileRecv\\TestInitialNullForStudent (1)\\InjectDll\\Debug\\TestApp.exe");//被注入的程序的地址
-
-    if (DetourCreateProcessWithDllEx(EXE, NULL, NULL, NULL, TRUE,
-        CREATE_DEFAULT_ERROR_MODE | CREATE_SUSPENDED, NULL, DirPath, &si, &pi,
-        DllPath, NULL))
-    {  //boxa(null,inject,inject,null)
+    wcscpy_s(EXE, MAX_PATH, L"D:\\TestInitialNullForStudent \\InjectDll\\Debug\\TestApp.exe");
+    if (DetourCreateProcessWithDllEx(EXE, NULL, NULL, NULL, TRUE, CREATE_DEFAULT_ERROR_MODE | CREATE_SUSPENDED, NULL, DirPath, &si, &pi, DLLPath, NULL)) {
         ResumeThread(pi.hThread);
         WaitForSingleObject(pi.hProcess, INFINITE);
     }
-    else
-    {
+    else {
         char error[100];
         sprintf_s(error, "%d", GetLastError());
     }
     return 0;
+    //printf("Test!!!!!!!");
 }
