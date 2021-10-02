@@ -1,1 +1,35 @@
-
+ int n=s.size();
+        if(n<2){
+            return s;
+        }
+        vector<vector<int>> dp(n,vector<int>(n));
+        //求Len
+        int maxLen=1;
+         int begin=0;
+        for(int i=0;i<n;i++){
+            dp[i][i]=true;
+        }
+        for(int Len=2;Len<=n;Len++){
+            for(int i=0;i<n;i++){
+                int j=i+Len-1;
+                if(j>n){
+                    break;
+                }
+                if(s[i]!=s[j]){
+                    dp[i][j]=false;
+                }
+                else{
+                    if(Len==2)
+                    dp[i][j]=true;
+                    else{
+                        dp[i][j]=dp[i+1][j-1];
+                    }
+                }
+                if(dp[i][j]&&Len>maxLen){
+                    maxLen=Len;
+                }
+                begin=i;
+            }
+        }
+        return s.substr(begin,maxLen);
+        
